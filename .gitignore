@@ -1,0 +1,38 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+.mvn
+
+output
+src/main/resources/static
+fe-base
+fe-tools
+nodejs
+fe_source/output
+fe_source/src/face/*.JPG
+fe_source/src/face/*.jpg
+
+# Mac crap
+.DS_Store
+
