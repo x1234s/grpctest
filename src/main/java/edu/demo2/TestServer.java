@@ -1,10 +1,11 @@
-package edu.demo;
+package edu.demo2;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-import test.TestServiceGrpc;
-import test.testProto;
+import test2.PcInput;
+import test2.PcOutput;
+import test2.TestService2Grpc;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -27,7 +28,7 @@ public class TestServer {
 
     private void start() throws IOException {
         /* The port on which the server should run */
-        int port = 50051;
+        int port = 50052;
         //这个部分启动server
         server = ServerBuilder.forPort(port)
                 .addService(new TestImpl())
@@ -59,13 +60,13 @@ public class TestServer {
         }
     }
 
-    static class TestImpl extends TestServiceGrpc.TestServiceImplBase {
+    static class TestImpl extends TestService2Grpc.TestService2ImplBase {
 
         @Override
-        public void testFunction(testProto.TestInput request, StreamObserver<testProto.TestOutput> responseObserver) {
-            logger.info("key:"+request.getKey()+", name:"+request.getName()+", age:");
-            testProto.TestOutput reply = testProto.TestOutput.newBuilder().setKey("瓜皮" + request.getKey()).setName("瓜皮name" + request.getName()).setAge("大司马age").build();
-            logger.info("key:"+reply.getKey()+", name:"+reply.getName()+", age:" + reply.getAge());
+        public void testFunction2(PcInput request, StreamObserver<PcOutput> responseObserver) {
+            logger.info("name:"+request.getName()+", age:"+request.getAge()+", sex:" + request.getSex());
+           PcOutput reply = test2.PcOutput.newBuilder().setAge(request.getAge() + 2).setName(request.getName() + "good").setSex(request.getSex()).build();
+            logger.info("name:"+reply.getName()+", age:"+reply.getAge()+", sex:" + reply.getSex());
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }

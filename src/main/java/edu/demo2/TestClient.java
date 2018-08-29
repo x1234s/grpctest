@@ -1,11 +1,12 @@
-package edu.demo;
+package edu.demo2;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import test.TestServiceGrpc;
-import test.testProto;
+import test2.PcInput;
+import test2.PcOutput;
+import test2.TestService2Grpc;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ public class TestClient {
     private static final Logger logger = Logger.getLogger(TestClient.class.getName());
 
     private final ManagedChannel channel;
-    private final TestServiceGrpc.TestServiceBlockingStub blockingStub;
+    private final TestService2Grpc.TestService2BlockingStub blockingStub;
 
     public TestClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port)
@@ -29,15 +30,14 @@ public class TestClient {
                 .usePlaintext(true)
                 .build();
         // 使用我们从proto文件生成的GreeterGrpc类提供的newBlockingStub方法指定channel创建stubs
-        blockingStub = TestServiceGrpc.newBlockingStub(channel);
+        blockingStub = TestService2Grpc.newBlockingStub(channel);
     }
 
     public static void main(String[] args) throws InterruptedException {
-        TestClient client = new TestClient("localhost", 50051);
+        TestClient client = new TestClient("localhost", 50052);
         try {
-            String user = "大司马";
             //调用对应的方法
-            client.test(user);
+            client.test("name1", "20", "sex1");
         } finally {
             client.shutdown();
         }
@@ -47,17 +47,17 @@ public class TestClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public void test(String name) {
-        testProto.TestInput request = testProto.TestInput.newBuilder().setKey(name).setName("5565").build();
-        testProto.TestOutput response;
+    public void test(String name, String age, String sex) {
+        PcInput request = PcInput.newBuilder().setName(name).setAge(age).setSex(sex).build();
+        PcOutput response;
         try {
-            Channel channel =  ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext(true).build();
-            TestServiceGrpc.TestServiceBlockingStub blockingStub =TestServiceGrpc.newBlockingStub(channel);
+            Channel channel =  ManagedChannelBuilder.forAddress("localhost", 50052).usePlaintext(true).build();
+            TestService2Grpc.TestService2BlockingStub blockingStub =TestService2Grpc.newBlockingStub(channel);
             //调用方法
-            response = blockingStub.testFunction(request);
+            response = blockingStub.testFunction2(request);
         } catch (StatusRuntimeException e) {
             return;
         }
-        logger.info("Greeting: " + response.getKey());
+        logger.info("name: " + response.getName() + ",age: " + response.getAge() + ",sex: " + response.getSex());
     }
 }

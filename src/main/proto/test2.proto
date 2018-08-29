@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test2";
+option java_outer_classname = "test2Proto";
+option objc_class_prefix = "TS2";
+
+package test;
+
+service TestService2 {
+  rpc testFunction_2 (PcInput) returns (PcOutput) {}
+}
+
+message PcInput {
+  string name = 5;
+  string age = 20;
+  string sex = 1;
+}
+
+message PcOutput {
+  string name = 5;
+  string age = 21;
+  string sex = 8;
+
+}
